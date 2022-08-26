@@ -36,6 +36,13 @@ local classes_path = vim.fn.expand('<sfile>:p:h') .. "/classes.json"
 
 local function register_tailwind()
     local classes = vim.fn.json_decode(read_file(classes_path))
+    local classes_items = {}
+    for i, class in ipairs(classes) do
+        classes_items[i] = {
+            label = class.id,
+            documentation = class.type,
+        }
+    end
 
     local tw = {
         name = "tw",
@@ -45,12 +52,7 @@ local function register_tailwind()
             fn = function(_, done)
                 local items = {}
                 if node_at_tw_node() then
-                    for i, class in ipairs(classes) do
-                        items[i] = {
-                            label = class.id,
-                            documentation = class.type,
-                        }
-                    end
+                    items = classes_items
                 end
                 return done({
                     {
