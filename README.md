@@ -19,4 +19,5 @@ using packer:
 - `RegisterTw` activates completion
 - `DergisterTw` deactivates completion
 
-After activating completion, you will be able to get lsp completion of tw classes inside **tw``** expression ![image](https://user-images.githubusercontent.com/22427111/186982918-fbbdd71a-e291-4916-a833-61dea712b769.png)
+After activating completion, you will be able to get lsp completion of tw classes inside **tw``** expression
+![image](https://user-images.githubusercontent.com/22427111/187043201-fa7b2127-0572-4f4b-a4fb-16b297fb1902.png)
