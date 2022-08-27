@@ -32,15 +32,14 @@ end
 
 -- needs to be called as soon as the plugin is sourced
 -- so it can't be inside a callable function
-local classes_path = vim.fn.expand('<sfile>:p:h') .. "/classes.json"
+local classes_path = vim.fn.expand('<sfile>:p:h') .. "/classes"
 
 local function register_tailwind()
-    local classes = vim.fn.json_decode(read_file(classes_path))
+    local classes = vim.split(read_file(classes_path), "\n")
     local classes_items = {}
     for i, class in ipairs(classes) do
         classes_items[i] = {
-            label = class.id,
-            documentation = class.type,
+            label = class
         }
     end
 
@@ -49,15 +48,17 @@ local function register_tailwind()
         method = methods.internal.COMPLETION,
         filetypes = {},
         generator = {
-            fn = function(_, done)
+            fn = function(params, done)
                 local items = {}
                 if node_at_tw_node() then
                     items = classes_items
                 end
                 return done({
                     {
-                        items = items,
-                        isIncomplete = true,
+                        items = vim.tbl_filter(function(item)
+                            return vim.startswith(item.label, params.word_to_complete)
+                        end, items),
+                        isIncomplete = #items == 0,
                     }
                 })
             end,
