@@ -15,6 +15,23 @@ local function read_file(filename)
     return data
 end
 
+-- <el class="here"/>
+local function node_at_class_node()
+    local node = ts_utils.get_node_at_cursor()
+    if not node then
+        return false
+    end
+    local gparent = node:parent():parent()
+    if not gparent then
+        return false
+    end
+    local prop_ident = gparent:child()
+    local ident_name = vim.treesitter.get_node_text(prop_ident, 0)
+
+    return ident_name == "class"
+end
+
+-- <el class={tw`here`}/>
 local function node_at_tw_node()
     local node = ts_utils.get_node_at_cursor()
     if not node then
@@ -50,7 +67,7 @@ local function register_tailwind()
         generator = {
             fn = function(params, done)
                 local items = {}
-                if node_at_tw_node() then
+                if node_at_tw_node() or node_at_class_node() then
                     items = classes_items
                 end
                 return done({
