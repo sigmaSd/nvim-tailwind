@@ -1,5 +1,5 @@
 # nvim-tailwind
-Autocomplete tailwind classes inside **tw``**
+Autocomplete tailwind classes
 
 ## Install
 
