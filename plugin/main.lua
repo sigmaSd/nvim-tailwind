@@ -72,9 +72,9 @@ local function register_tailwind()
                 end
                 return done({
                     {
-                        items = vim.tbl_filter(function(item)
+                        items = table.slice(vim.tbl_filter(function(item)
                             return vim.startswith(item.label, params.word_to_complete)
-                        end, items),
+                        end, items), 1, 10),
                         isIncomplete = #items == 0,
                     }
                 })
@@ -90,3 +90,13 @@ vim.api.nvim_create_user_command("RegisterTw", register_tailwind, {})
 vim.api.nvim_create_user_command("DeregisterTw", function()
     null_ls.deregister("tw")
 end, {})
+
+function table.slice(tbl, first, last, step)
+    local sliced = {}
+
+    for i = first or 1, last or #tbl, step or 1 do
+        sliced[#sliced + 1] = tbl[i]
+    end
+
+    return sliced
+end
