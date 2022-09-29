@@ -58,7 +58,14 @@ end
 -- so it can't be inside a callable function
 local classes_path = vim.fn.expand('<sfile>:p:h') .. "/classes"
 
+
+local active = false
 local function register_tailwind()
+    if active then
+        return
+    end
+    active = true
+
     local classes = vim.split(read_file(classes_path), "\n")
     local classes_items = {}
     for i, class in ipairs(classes) do
@@ -96,6 +103,7 @@ end
 vim.api.nvim_create_user_command("RegisterTw", register_tailwind, {})
 vim.api.nvim_create_user_command("DeregisterTw", function()
     null_ls.deregister("tw")
+    active = false
 end, {})
 
 function table.slice(tbl, first, last, step)
