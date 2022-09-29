@@ -21,11 +21,18 @@ local function node_at_class_node()
     if not node then
         return false
     end
-    local gparent = node:parent():parent()
-    if not gparent then
+
+    -- look for a jsx_attribute either as parent or grand parent
+    local parent = node:parent()
+    if parent:type() ~= "jsx_attribute" then
+        parent = parent:parent()
+    end
+
+    if not parent then
         return false
     end
-    local prop_ident = gparent:child()
+
+    local prop_ident = parent:child()
     local ident_name = vim.treesitter.get_node_text(prop_ident, 0)
 
     return ident_name == "class"
