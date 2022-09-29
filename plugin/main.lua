@@ -79,9 +79,9 @@ local function register_tailwind()
                 end
                 return done({
                     {
-                        items = table.slice(vim.tbl_filter(function(item)
+                        items = vim.tbl_filter(function(item)
                             return vim.startswith(item.label, params.word_to_complete)
-                        end, items), 1, 10),
+                        end, items),
                         isIncomplete = #items == 0,
                     }
                 })
